@@ -1,30 +1,71 @@
-abstract class Vehicle {
-    protected final String regNo;
-    Vehicle(String regNo) {
+class Vehicle {
+    String regNo;
+    String type;
+
+    Vehicle(String regNo, String type) {
         this.regNo = regNo;
-        System.out.println("Vehicle constructor");
+        this.type = type;
+        System.out.println("Vehicle Constructor");
     }
-    abstract double ratePerHour();
+
+    void display() {
+        System.out.println("Registration Number: " + regNo);
+        System.out.println("Vehicle Type: " + type);
+    }
 }
 
 class Car extends Vehicle {
-    Car(String regNo) {
-        super(regNo);
-        System.out.println("Car constructor");
+    double rate;
+
+    Car(String regNo, double rate) {
+        super(regNo, "Car");
+        this.rate = rate;
+        System.out.println("Car Constructor");
     }
-    @Override double ratePerHour() { return 30; }
+
+    void calculateFee(int hours) {
+        System.out.println("Car Parking Fee: Rs. " + (hours * rate));
+    }
+}
+
+class Bike extends Vehicle {
+    double rate;
+
+    Bike(String regNo, double rate) {
+        super(regNo, "Bike");
+        this.rate = rate;
+        System.out.println("Bike Constructor");
+    }
+
+    void calculateFee(int hours) {
+        System.out.println("Bike Parking Fee: Rs. " + (hours * rate));
+    }
 }
 
 class ElectricCar extends Car {
-    ElectricCar(String regNo) {
-        super(regNo);
-        System.out.println("ElectricCar constructor");
+    boolean chargingRequired;
+
+    ElectricCar(String regNo, double rate, boolean chargingRequired) {
+        super(regNo, rate);
+        this.chargingRequired = chargingRequired;
+        System.out.println("ElectricCar Constructor");
+    }
+
+    void displayChargingStatus() {
+        System.out.println("Charging Required: " + chargingRequired);
     }
 }
 
-public class InheritanceDemo {
+public class Main {
     public static void main(String[] args) {
-        Vehicle v = new ElectricCar("TN03C3");
-        System.out.println("Rate: Rs " + v.ratePerHour());
+        ElectricCar e = new ElectricCar("TN01AB1111", 50, true);
+
+        e.display();
+        e.calculateFee(3);
+        e.displayChargingStatus();
+
+        Bike b = new Bike("TN02CD2222", 20);
+        b.display();
+        b.calculateFee(2);
     }
 }

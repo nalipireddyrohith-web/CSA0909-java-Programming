@@ -1,45 +1,148 @@
-import java.util.Objects;
+
+import java.util.Scanner;
 
 class Vehicle {
-    private final String regNo;
-    private final String type;
-    private final long entryTimeMillis;
+    String regNo, type, entryTime;
 
-    Vehicle(String regNo, String type, long entryTimeMillis) {
-        this.regNo = Objects.requireNonNull(regNo);
-        this.type = Objects.requireNonNull(type);
-        this.entryTimeMillis = entryTimeMillis;
-    }
-
-    String getRegNo() { return regNo; }
-    String getType() { return type; }
-    long getEntryTimeMillis() { return entryTimeMillis; }
-
-    @Override
-    public String toString() {
-        return regNo + " (" + type + ")";
+    Vehicle(String regNo, String type, String entryTime) {
+        this.regNo = regNo;
+        this.type = type;
+        this.entryTime = entryTime;
     }
 }
 
-public class Task1 {
-    public static void main(String[] args) {
-        Vehicle[] vehicles = {
-            new Vehicle("TN01AB1111", "CAR", System.currentTimeMillis()),
-            new Vehicle("TN02CD2222", "BIKE", System.currentTimeMillis())
-        };
-        for (Vehicle v : vehicles) {
-            if (v.getRegNo().equals("TN02CD2222")) {
-                System.out.println("Found: " + v);
+class ParkingSlot {
+    int slotNo;
+    Vehicle vehicle;
+
+    ParkingSlot(int slotNo) {
+        this.slotNo = slotNo;
+    }
+}
+
+class Ticket {
+    static int nextTicketNo = 1001;
+    int ticketNo;
+
+    Ticket() {
+        ticketNo = nextTicketNo++;
+    }
+}
+
+class ParkingLot {
+    ParkingSlot[] slots;
+
+    ParkingLot(int capacity) {
+        slots = new ParkingSlot[capacity];
+        for (int i = 0; i < capacity; i++) {
+            slots[i] = new ParkingSlot(i + 1);
+        }
+    }
+
+    void parkVehicle(Scanner sc) {
+        System.out.print("Enter Registration Number: ");
+        String regNo = sc.nextLine();
+
+        System.out.print("Enter Vehicle Type: ");
+        String type = sc.nextLine();
+
+        System.out.print("Enter Entry Time: ");
+        String entryTime = sc.nextLine();
+
+        for (ParkingSlot s : slots) {
+            if (s.vehicle != null &&
+                s.vehicle.regNo.equalsIgnoreCase(regNo)) {
+                System.out.println("Vehicle Already Parked");
+                return;
             }
         }
 
-        String[] regNo = {"TN01AB1111", "TN02CD2222"};
-        String[] type = {"CAR", "BIKE"};
-        long[] entryTime = {1000L, 2000L};
-        for (int i = 0; i < regNo.length; i++) {
-            if (regNo[i].equals("TN02CD2222")) {
-                System.out.println("Parallel arrays: " + regNo[i] + " " + type[i]
-                    + " " + entryTime[i]);
+        for (ParkingSlot s : slots) {
+            if (s.vehicle == null) {
+                s.vehicle = new Vehicle(regNo, type, entryTime);
+                Ticket t = new Ticket();
+                System.out.println("Vehicle Parked Successfully");
+                System.out.println("Slot Number: " + s.slotNo);
+                System.out.println("Ticket Number: " + t.ticketNo);
+                return;
+            }
+        }
+
+        System.out.println("Parking Full");
+    }
+
+    void searchVehicle(Scanner sc) {
+        System.out.print("Enter Registration Number: ");
+        String regNo = sc.nextLine();
+
+        for (ParkingSlot s : slots) {
+            if (s.vehicle != null &&
+                s.vehicle.regNo.equalsIgnoreCase(regNo)) {
+                System.out.println("Vehicle Found");
+                System.out.println("Registration Number: " + s.vehicle.regNo);
+                System.out.println("Type: " + s.vehicle.type);
+                System.out.println("Entry Time: " + s.vehicle.entryTime);
+                System.out.println("Slot Number: " + s.slotNo);
+                return;
+            }
+        }
+
+        System.out.println("Vehicle Not Found");
+    }
+
+    void displayVehicles() {
+        for (ParkingSlot s : slots) {
+            if (s.vehicle != null) {
+                System.out.println(s.slotNo + " " +
+                    s.vehicle.regNo + " " +
+                    s.vehicle.type + " " +
+                    s.vehicle.entryTime);
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Parking Capacity: ");
+        int capacity = sc.nextInt();
+        sc.nextLine();
+
+        if (capacity <= 0) {
+            System.out.println("Invalid Capacity");
+            sc.close();
+            return;
+        }
+
+        ParkingLot lot = new ParkingLot(capacity);
+
+        while (true) {
+            System.out.println("\n1. Park Vehicle");
+            System.out.println("2. Search Vehicle");
+            System.out.println("3. Display Vehicles");
+            System.out.println("4. Exit");
+            System.out.print("Enter Choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    lot.parkVehicle(sc);
+                    break;
+                case 2:
+                    lot.searchVehicle(sc);
+                    break;
+                case 3:
+                    lot.displayVehicles();
+                    break;
+                case 4:
+                    sc.close();
+                    return;
+                default:
+                    System.out.println("Invalid Choice");
             }
         }
     }

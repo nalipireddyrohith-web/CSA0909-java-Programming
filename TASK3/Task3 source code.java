@@ -4,15 +4,11 @@ public class ParkingFacility {
     public ParkingFacility(int[] slotsPerFloor) {
         slots = new String[slotsPerFloor.length][];
         for (int f = 0; f < slotsPerFloor.length; f++) {
-            if (slotsPerFloor[f] < 0) throw new IllegalArgumentException("Negative slot count");
             slots[f] = new String[slotsPerFloor[f]];
         }
     }
 
     public int[] allocate(String vehicleNo) {
-        if (vehicleNo == null || vehicleNo.isBlank()) {
-            throw new IllegalArgumentException("Vehicle number is required");
-        }
         for (int f = 0; f < slots.length; f++) {
             for (int s = 0; s < slots[f].length; s++) {
                 if (slots[f][s] == null) {
@@ -25,11 +21,36 @@ public class ParkingFacility {
     }
 
     public boolean release(int floor, int slot) {
-        if (floor < 0 || floor >= slots.length) return false;
-        if (slot < 0 || slot >= slots[floor].length) return false;
-        if (slots[floor][slot] == null) return false;
+        if (floor < 0 || floor >= slots.length) {
+            return false;
+        }
+
+        if (slot < 0 || slot >= slots[floor].length) {
+            return false;
+        }
+
+        if (slots[floor][slot] == null) {
+            return false;
+        }
+
         slots[floor][slot] = null;
         return true;
+    }
+
+    public double computeFee(int minutes, double hourlyRate,
+                             double dailyMaximum) {
+        if (minutes <= 0) {
+            return 0;
+        }
+
+        int hours = (minutes + 59) / 60;
+        double fee = hours * hourlyRate;
+
+        if (fee > dailyMaximum) {
+            fee = dailyMaximum;
+        }
+
+        return fee;
     }
 
     public static void main(String[] args) {
@@ -39,7 +60,7 @@ public class ParkingFacility {
         System.out.println(java.util.Arrays.toString(p.allocate("TN03EF3333")));
         System.out.println(java.util.Arrays.toString(p.allocate("TN04GH4444")));
         System.out.println(p.release(0, 1) + " " + p.release(0, 1) + " "
-            + p.release(5, 0));
+                + p.release(5, 0));
         System.out.println(java.util.Arrays.toString(p.allocate("TN04GH4444")));
     }
 }

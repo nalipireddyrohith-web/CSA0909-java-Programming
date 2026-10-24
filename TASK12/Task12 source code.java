@@ -1,108 +1,144 @@
-import java.time.LocalTime;
 import java.util.*;
 
-interface ParkingPass {
+interface Pass {
     boolean isValid();
-    boolean coversParkingFee();
+    double getDiscount();
 }
-class OneDayPass implements ParkingPass {
-    private final LocalTime validFrom;
-    private final LocalTime validUntil;
-    OneDayPass(LocalTime validFrom, LocalTime validUntil) {
-        this.validFrom = validFrom;
-        this.validUntil = validUntil;
+
+class OneDayPass implements Pass {
+    public boolean isValid() {
+        return true;
     }
-    @Override public boolean isValid() {
-        LocalTime now = LocalTime.now();
-        return !now.isBefore(validFrom) && !now.isAfter(validUntil);
+
+    public double getDiscount() {
+        return 0;
     }
-    @Override public boolean coversParkingFee() { return isValid(); }
 }
+
 abstract class Vehicle {
     private final String regNo;
-    protected Vehicle(String regNo) {
-        if (regNo == null || regNo.isBlank()) throw new IllegalArgumentException("Registration required");
-        this.regNo = regNo.toUpperCase();
+
+    Vehicle(String regNo) {
+        this.regNo = regNo;
     }
-    String getRegNo() { return regNo; }
-    abstract double calculateFee(int minutes, LocalTime entry, LocalTime exit);
-}
-class TwoWheeler extends Vehicle {
-    TwoWheeler(String r) { super(r); }
-    @Override double calculateFee(int m, LocalTime in, LocalTime out) {
-        return m <= 0 ? 0 : ((m + 59) / 60) * 10.0;
+
+    public String getRegNo() {
+        return regNo;
     }
+
+    abstract double calculateFee(int hours, int hourOfDay);
 }
+
 class Car extends Vehicle {
-    Car(String r) { super(r); }
-    @Override double calculateFee(int m, LocalTime in, LocalTime out) {
-        return m <= 0 ? 0 : ((m + 59) / 60) * 30.0;
+    Car(String regNo) {
+        super(regNo);
+    }
+
+    @Override
+    double calculateFee(int hours, int hourOfDay) {
+        return hours * 30;
     }
 }
-class ElectricCar extends Car {
-    ElectricCar(String r) { super(r); }
-}
-class EBike extends Vehicle {
-    private static final double FLAT_FEE = 25.0;
-    EBike(String r) { super(r); }
-    @Override double calculateFee(int m, LocalTime in, LocalTime out) {
-        return m <= 0 ? 0 : FLAT_FEE;
+
+class ElectricBike extends Vehicle {
+    ElectricBike(String regNo) {
+        super(regNo);
+    }
+
+    @Override
+    double calculateFee(int hours, int hourOfDay) {
+        return 50;
     }
 }
+
 class DeliveryVan extends Vehicle {
-    DeliveryVan(String r) { super(r); }
-    @Override double calculateFee(int m, LocalTime in, LocalTime out) {
-        if (m <= 0) return 0;
-        int hours = (m + 59) / 60;
-        boolean daytime = !in.isBefore(LocalTime.of(9, 0)) && out.isBefore(LocalTime.of(17, 0).plusSeconds(1));
-        double rate = daytime ? 60.0 : 30.0;
-        return hours * rate;
+    DeliveryVan(String regNo) {
+        super(regNo);
+    }
+
+    @Override
+    double calculateFee(int hours, int hourOfDay) {
+        if (hourOfDay >= 9 && hourOfDay < 17) {
+            return hours * 60;
+        }
+        return hours * 30;
     }
 }
-class ExtendedParkingSystem {
+
+class ParkingFacility {
     private final String[][] slots;
-    private final Map<String, Vehicle> active = new HashMap<>();
-    ExtendedParkingSystem(int[] capacities) {
-        slots = new String[capacities.length][];
-        for (int i = 0; i < capacities.length; i++) slots[i] = new String[capacities[i]];
+    private final Map<String, Vehicle> parked = new HashMap<>();
+
+    ParkingFacility(int[] slotsPerFloor) {
+        slots = new String[slotsPerFloor.length][];
+        for (int i = 0; i < slotsPerFloor.length; i++) {
+            slots[i] = new String[slotsPerFloor[i]];
+        }
     }
-    int[] allocate(String regNo) {
+
+    void park(Vehicle v) {
+        if (parked.containsKey(v.getRegNo())) {
+            System.out.println("Vehicle already parked");
+            return;
+        }
+
         for (int f = 0; f < slots.length; f++) {
             for (int s = 0; s < slots[f].length; s++) {
                 if (slots[f][s] == null) {
-                    slots[f][s] = regNo;
-                    return new int[]{f, s};
+                    slots[f][s] = v.getRegNo();
+                    parked.put(v.getRegNo(), v);
+                    System.out.println(v.getRegNo() + " parked at Floor "
+                            + (f + 1) + ", Slot " + (s + 1));
+                    return;
                 }
             }
         }
-        return null;
+
+        System.out.println("Parking Full");
     }
-    void park(Vehicle v) {
-        if (active.containsKey(v.getRegNo())) throw new IllegalArgumentException("Duplicate registration");
-        int[] position = allocate(v.getRegNo());
-        if (position == null) throw new IllegalStateException("Parking full");
-        active.put(v.getRegNo(), v);
-        System.out.println(v.getClass().getSimpleName() + " parked at " + Arrays.toString(position));
-    }
-    double fee(Vehicle v, int minutes, LocalTime in, LocalTime out, ParkingPass pass) {
-        if (pass != null && pass.coversParkingFee()) return 0.0;
-        return v.calculateFee(minutes, in, out);
+
+    void exit(String regNo, int hours, int hourOfDay, Pass pass) {
+        Vehicle v = parked.remove(regNo);
+
+        if (v == null) {
+            System.out.println("Vehicle not found");
+            return;
+        }
+
+        for (int f = 0; f < slots.length; f++) {
+            for (int s = 0; s < slots[f].length; s++) {
+                if (regNo.equals(slots[f][s])) {
+                    slots[f][s] = null;
+                    break;
+                }
+            }
+        }
+
+        double fee = v.calculateFee(hours, hourOfDay);
+
+        if (pass != null && pass.isValid()) {
+            fee = pass.getDiscount();
+        }
+
+        System.out.println("Vehicle: " + regNo);
+        System.out.println("Parking Fee: Rs. " + fee);
     }
 }
-public class ExtendedParkingDemo {
+
+public class Main {
     public static void main(String[] args) {
-        ExtendedParkingSystem p = new ExtendedParkingSystem(new int[]{2, 3, 4, 2, 5});
-        LocalTime in = LocalTime.of(10, 0);
-        LocalTime out = LocalTime.of(11, 30);
-        Vehicle ebike = new EBike("TN10E100");
-        Vehicle van = new DeliveryVan("TN20V200");
-        Vehicle car = new Car("TN30C300");
-        p.park(ebike);
-        p.park(van);
-        p.park(car);
-        System.out.println("E-Bike fee: Rs " + p.fee(ebike, 90, in, out, null));
-        System.out.println("Delivery van daytime fee: Rs " + p.fee(van, 90, in, out, null));
-        System.out.println("Car fee with valid one-day pass: Rs " +
-            p.fee(car, 90, in, out, new OneDayPass(LocalTime.MIN, LocalTime.MAX)));
+        ParkingFacility parking =
+                new ParkingFacility(new int[]{20, 30, 40, 25, 50});
+
+        parking.park(new Car("TN01AB1111"));
+        parking.park(new ElectricBike("TN02CD2222"));
+        parking.park(new DeliveryVan("TN03EF3333"));
+
+        parking.exit("TN01AB1111", 3, 10, null);
+        parking.exit("TN02CD2222", 2, 11, null);
+        parking.exit("TN03EF3333", 2, 10, null);
+
+        parking.park(new Car("TN04GH4444"));
+        parking.exit("TN04GH4444", 5, 14, new OneDayPass());
     }
 }

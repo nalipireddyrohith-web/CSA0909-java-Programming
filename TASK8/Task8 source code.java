@@ -5,7 +5,7 @@ interface Chargeable {
 abstract class Vehicle {
     private final String regNo;
 
-    protected Vehicle(String regNo) {
+    Vehicle(String regNo) {
         this.regNo = regNo;
     }
 
@@ -19,14 +19,12 @@ abstract class Vehicle {
         if (minutes <= 0) {
             return 0;
         }
-
         int hours = (minutes + 59) / 60;
         return hours * ratePerHour();
     }
 
     public double calculateFee(int entryHour, int exitHour) {
-        int hours = exitHour - entryHour;
-        return calculateFee(hours * 60);
+        return calculateFee((exitHour - entryHour) * 60);
     }
 
     @Override
@@ -74,7 +72,7 @@ class ElectricCar extends Car implements Chargeable {
     }
 }
 
-public class FeeDemo {
+public class Main {
     public static void main(String[] args) {
         Vehicle[] parked = {
             new TwoWheeler("TN01A1"),
@@ -86,8 +84,7 @@ public class FeeDemo {
             double fee = v.calculateFee(130);
 
             if (v instanceof Chargeable) {
-                Chargeable c = (Chargeable) v;
-                fee += c.chargingFee(10);
+                fee += ((Chargeable) v).chargingFee(10);
             }
 
             System.out.println(v.getClass().getSimpleName() + " "

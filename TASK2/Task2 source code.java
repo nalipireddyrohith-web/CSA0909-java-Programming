@@ -1,21 +1,38 @@
-public class DataRepresentationDemo {
+
+import java.util.Scanner;
+
+public class Main {
     public static void main(String[] args) {
-        int[] slotsPerFloor = {20, 50, 35};
-        String[][] slots = new String[slotsPerFloor.length][];
-        for (int f = 0; f < slotsPerFloor.length; f++) {
-            slots[f] = new String[slotsPerFloor[f]];
+        Scanner sc = new Scanner(System.in);
+
+        int[] capacity = {20, 50, 35};
+        String[][] parking = new String[3][];
+
+        for (int i = 0; i < 3; i++) {
+            parking[i] = new String[capacity[i]];
         }
 
-        int minutes = 61;
-        double hourlyRate = 30.0;
-        int wrongHours = minutes / 60;
-        double wrongFee = wrongHours * hourlyRate;
-        int billableHours = (minutes + 59) / 60;
-        double correctFee = billableHours * hourlyRate;
+        System.out.print("Enter number of floors: ");
+        int floors = sc.nextInt();
 
-        System.out.println("Floors: " + slots.length);
-        System.out.println("Slots on floor 2: " + slots[2].length);
-        System.out.println("Wrong fee using minutes / 60: Rs " + wrongFee);
-        System.out.println("Correct fee using ceiling integer arithmetic: Rs " + correctFee);
+        System.out.print("Enter floor number: ");
+        int floor = sc.nextInt();
+
+        System.out.println("Number of slots: " + capacity[floor - 1]);
+
+        System.out.print("Enter parking duration in minutes: ");
+        int minutes = sc.nextInt();
+
+        System.out.print("Enter hourly parking rate: ");
+        double rate = sc.nextDouble();
+
+        int hours = (minutes + 59) / 60;
+        double fee = hours * rate;
+
+        System.out.println("Parking Duration: " + minutes + " minutes");
+        System.out.println("Billable Hours: " + hours);
+        System.out.println("Parking Fee: Rs. " + fee);
+
+        sc.close();
     }
 }

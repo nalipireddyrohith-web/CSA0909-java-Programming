@@ -1,0 +1,4 @@
+Size,ArrayList_addEnd_ms,LinkedList_addEnd_ms,ArrayList_getMiddle_ms,LinkedList_getMiddle_ms,ArrayDeque_frontOps_ms
+1000,0.088,0.087,0.135,0.781,0.219
+10000,0.41,0.337,0.6,6.682,0.471
+100000,1.828,0.789,0.605,66.705,1.126

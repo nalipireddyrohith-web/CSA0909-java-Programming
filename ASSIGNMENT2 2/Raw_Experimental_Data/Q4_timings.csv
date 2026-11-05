@@ -1,0 +1,4 @@
+Size,HashMap_lookup_ms,TreeMap_lookup_ms,LinkedHashMap_lookup_ms,TreeMap_report_ms
+1000,38.535,33.975,28.444,0.116
+10000,44.63,37.577,39.641,0.421
+100000,94.064,38.524,32.004,0.53

@@ -1,0 +1,4 @@
+Workload,String_ms,StringBuilder_ms,StringBuffer_ms
+5 fields x 1000 tickets,0.905,0.57,0.708
+50 fields x 10000 tickets,76.639,41.412,6.402
+200 fields x 5000 tickets,114.576,14.468,28.668

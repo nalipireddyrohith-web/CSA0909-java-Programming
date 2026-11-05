@@ -1,0 +1,3 @@
+Test,Observed_size
+Without hashCode override,2
+With correct hashCode needed,3

@@ -1,0 +1,4 @@
+Enter account number: Enter withdrawal amount: Withdrawal successful for account: 12345678
+Amount: 200.00
+Balance: 800.00
+ATM session closed.

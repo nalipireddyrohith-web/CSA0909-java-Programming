@@ -1,0 +1,1 @@
+StorageDemo standard input not required.

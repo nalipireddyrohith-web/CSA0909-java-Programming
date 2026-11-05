@@ -1,0 +1,5 @@
+Files processed: 102
+Successful: 100
+Failed: 2
+Thread pool size: 4
+Summary complete: true

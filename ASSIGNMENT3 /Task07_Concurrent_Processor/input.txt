@@ -1,0 +1,1 @@
+100 generated score files + corrupt + missing, pool sizes 1 2 4 8

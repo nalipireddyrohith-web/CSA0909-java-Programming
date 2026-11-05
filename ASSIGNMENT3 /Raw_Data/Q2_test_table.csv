@@ -1,0 +1,4 @@
+Scenario,Input/condition,Observed result
+1,120 KB,Saved answer01.pdf
+2,800 KB,SubmissionStorageException with IOException cause
+3,IOException without cause,Would produce null cause message

@@ -1,0 +1,6 @@
+Test,Input,Expected path,Observed
+1,12345678 / 200,Valid withdrawal,Valid withdrawal + finally
+2,12345678 / -50,IllegalArgumentException,Transaction error + finally
+3,12345678 / 1500,InsufficientBalanceException,Transaction error + finally
+4,12345678 / ABC,NumberFormatException,Input error + finally
+5,12345678 / 0,Valid zero withdrawal,Valid withdrawal + finally

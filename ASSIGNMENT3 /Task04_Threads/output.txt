@@ -1,0 +1,10 @@
+Before start, alive=false
+Before start, alive=false
+Before start, alive=false
+Before start, alive=false
+Station 1 scanned 100 scripts
+Station 2 scanned 125 scripts
+Station 3 scanned 150 scripts
+Station 4 scanned 175 scripts
+All stations completed.
+Total scripts scanned: 550

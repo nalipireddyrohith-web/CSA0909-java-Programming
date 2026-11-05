@@ -1,0 +1,2 @@
+Deadlock detected: true
+Threads: Transfer-A-B, Transfer-B-A

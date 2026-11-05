@@ -1,0 +1,3 @@
+Version,Success files,Missing file handling,Resource closure mechanism
+Manual close,2,Handled in catch,finally close()
+Try-with-resources,2,Handled in catch,automatic close at scope exit

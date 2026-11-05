@@ -1,0 +1,9 @@
+MANUAL CLOSE VERSION
+Store1 Sales: 12500
+Store2 Sales: 9800
+ERROR: input/missing.txt -> input/missing.txt
+TRY-WITH-RESOURCES VERSION
+Store1 Sales: 12500
+Store2 Sales: 9800
+ERROR: input/missing.txt -> input/missing.txt
+Both versions preserve the same success/error report semantics.

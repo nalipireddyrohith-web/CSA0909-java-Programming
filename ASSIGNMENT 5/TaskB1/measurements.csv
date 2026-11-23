@@ -1,0 +1,7 @@
+test,file_size,records_or_lines,unbuffered_ms,buffered_ms,notes
+buffering,1MB,,FILL_AFTER_EXECUTION,FILL_AFTER_EXECUTION,
+buffering,10MB,,FILL_AFTER_EXECUTION,FILL_AFTER_EXECUTION,
+buffering,50MB,,FILL_AFTER_EXECUTION,FILL_AFTER_EXECUTION,
+find-growth,1000,,,FILL_AFTER_EXECUTION,
+find-growth,10000,,,FILL_AFTER_EXECUTION,
+find-growth,100000,,,FILL_AFTER_EXECUTION,

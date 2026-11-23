@@ -1,0 +1,4 @@
+Screenshot required: transaction-failure.png
+
+Capture this evidence from the actual program/database execution on the student's machine.
+Do not replace this with a fabricated screenshot.

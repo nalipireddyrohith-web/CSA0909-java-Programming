@@ -1,0 +1,6 @@
+Floors: 5, unequal slots supported: true
+E-bike fee: Rs 25.0
+Van fee 10AM for 2h: Rs 120.0
+Van fee 6PM for 2h: Rs 60.0
+One-day pass valid today: true
+Decision: MODIFY with jagged floors + Pass + vehicle fee abstraction.

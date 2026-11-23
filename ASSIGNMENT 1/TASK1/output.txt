@@ -1,0 +1,3 @@
+Campus Smart-Parking System
+Objects: Vehicle, ParkingSlot, ParkingTicket, ParkingFacility, Pass
+Rule: one active vehicle per slot and unique ticket numbers.

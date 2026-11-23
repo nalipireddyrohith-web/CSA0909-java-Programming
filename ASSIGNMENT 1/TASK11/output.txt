@@ -1,0 +1,6 @@
+Entered: TN11A1 floor=0 slot=0
+Entered: TN11B2 floor=1 slot=0
+Car fee: Rs 60.0
+TwoWheeler fee: Rs 10.0
+Invalid type: Unknown vehicle type
+Duplicate: Duplicate registration

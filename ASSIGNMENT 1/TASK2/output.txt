@@ -1,0 +1,4 @@
+Wrong integer division hours: 1
+Correct billable hours: 2
+Fee at Rs 30/hour: Rs 60.0
+Entry type: LocalDateTime

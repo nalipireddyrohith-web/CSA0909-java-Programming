@@ -1,0 +1,3 @@
+Occupancy: 2
+After release: 1
+A departed ticket becomes GC-eligible when no live reference points to it.

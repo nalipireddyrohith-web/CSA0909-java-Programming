@@ -1,0 +1,3 @@
+Rate: Rs 30.0
+Parking payment
+Currency: INR
